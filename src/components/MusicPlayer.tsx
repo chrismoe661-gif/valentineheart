@@ -1,44 +1,70 @@
 import { useState, useRef, useEffect } from "react";
 import { Volume2, VolumeX, Play, Pause } from "lucide-react";
 
+const YOUTUBE_VIDEO_ID = "8XzQML4y7cs";
+
 const MusicPlayer = () => {
   const [isPlaying, setIsPlaying] = useState(false);
-  const [volume, setVolume] = useState(0.3);
+  const [volume, setVolume] = useState(30);
   const [isMuted, setIsMuted] = useState(false);
   const [showControls, setShowControls] = useState(false);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [playerReady, setPlayerReady] = useState(false);
+  const playerRef = useRef<any>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Using a royalty-free lo-fi ambient track
-    const audio = new Audio(
-      "https://cdn.pixabay.com/audio/2024/11/01/audio_4956b4aedb.mp3"
-    );
-    audio.loop = true;
-    audio.volume = volume;
-    audioRef.current = audio;
+    // Load YouTube IFrame API
+    if (!(window as any).YT) {
+      const tag = document.createElement("script");
+      tag.src = "https://www.youtube.com/iframe_api";
+      document.head.appendChild(tag);
+    }
+
+    const initPlayer = () => {
+      playerRef.current = new (window as any).YT.Player("yt-player", {
+        videoId: YOUTUBE_VIDEO_ID,
+        playerVars: {
+          autoplay: 0,
+          loop: 1,
+          playlist: YOUTUBE_VIDEO_ID,
+          controls: 0,
+          disablekb: 1,
+          fs: 0,
+          modestbranding: 1,
+          rel: 0,
+        },
+        events: {
+          onReady: () => {
+            playerRef.current.setVolume(volume);
+            setPlayerReady(true);
+          },
+        },
+      });
+    };
+
+    if ((window as any).YT && (window as any).YT.Player) {
+      initPlayer();
+    } else {
+      (window as any).onYouTubeIframeAPIReady = initPlayer;
+    }
 
     return () => {
-      audio.pause();
-      audio.src = "";
+      if (playerRef.current?.destroy) playerRef.current.destroy();
     };
   }, []);
 
   useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.volume = isMuted ? 0 : volume;
+    if (playerRef.current?.setVolume) {
+      playerRef.current.setVolume(isMuted ? 0 : volume);
     }
   }, [volume, isMuted]);
 
-  const togglePlay = async () => {
-    if (!audioRef.current) return;
+  const togglePlay = () => {
+    if (!playerRef.current || !playerReady) return;
     if (isPlaying) {
-      audioRef.current.pause();
+      playerRef.current.pauseVideo();
     } else {
-      try {
-        await audioRef.current.play();
-      } catch {
-        // Autoplay blocked
-      }
+      playerRef.current.playVideo();
     }
     setIsPlaying(!isPlaying);
   };
@@ -47,12 +73,18 @@ const MusicPlayer = () => {
 
   return (
     <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-2">
+      {/* Hidden YouTube player */}
+      <div className="absolute w-0 h-0 overflow-hidden pointer-events-none">
+        <div id="yt-player" />
+      </div>
+
       {showControls && (
         <div className="bg-card/90 backdrop-blur-md rounded-2xl p-4 card-glow border border-border/50 animate-scale-in flex flex-col gap-3 min-w-[180px]">
           <div className="flex items-center gap-3">
             <button
               onClick={togglePlay}
               className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center hover:bg-primary/30 transition-colors"
+              disabled={!playerReady}
             >
               {isPlaying ? (
                 <Pause className="w-4 h-4 text-primary" />
@@ -74,17 +106,17 @@ const MusicPlayer = () => {
           <input
             type="range"
             min="0"
-            max="1"
-            step="0.05"
+            max="100"
+            step="5"
             value={isMuted ? 0 : volume}
             onChange={(e) => {
-              setVolume(parseFloat(e.target.value));
+              setVolume(parseInt(e.target.value));
               setIsMuted(false);
             }}
             className="w-full h-1.5 rounded-full appearance-none bg-primary/20 accent-primary cursor-pointer"
           />
           <p className="text-xs text-muted-foreground font-body text-center">
-            Volume: {isMuted ? 0 : Math.round(volume * 100)}%
+            Volume: {isMuted ? 0 : volume}%
           </p>
         </div>
       )}
