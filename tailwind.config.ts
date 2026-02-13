@@ -47,16 +47,16 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        sidebar: {
-          DEFAULT: "hsl(var(--sidebar-background))",
-          foreground: "hsl(var(--sidebar-foreground))",
-          primary: "hsl(var(--sidebar-primary))",
-          "primary-foreground": "hsl(var(--sidebar-primary-foreground))",
-          accent: "hsl(var(--sidebar-accent))",
-          "accent-foreground": "hsl(var(--sidebar-accent-foreground))",
-          border: "hsl(var(--sidebar-border))",
-          ring: "hsl(var(--sidebar-ring))",
-        },
+        "rose-glow": "hsl(var(--rose-glow))",
+        lavender: "hsl(var(--lavender))",
+        cream: "hsl(var(--cream))",
+        blush: "hsl(var(--blush))",
+        "warm-gold": "hsl(var(--warm-gold))",
+      },
+      fontFamily: {
+        serif: ["Playfair Display", "serif"],
+        handwritten: ["Dancing Script", "cursive"],
+        body: ["Lora", "serif"],
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -65,25 +65,37 @@ export default {
       },
       keyframes: {
         "accordion-down": {
-          from: {
-            height: "0",
-          },
-          to: {
-            height: "var(--radix-accordion-content-height)",
-          },
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
         },
         "accordion-up": {
-          from: {
-            height: "var(--radix-accordion-content-height)",
-          },
-          to: {
-            height: "0",
-          },
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
+        },
+        "float-heart": {
+          "0%": { transform: "translateY(100vh) rotate(0deg) scale(0)", opacity: "0" },
+          "10%": { opacity: "0.6", transform: "translateY(90vh) rotate(10deg) scale(0.8)" },
+          "90%": { opacity: "0.3" },
+          "100%": { transform: "translateY(-10vh) rotate(45deg) scale(1)", opacity: "0" },
+        },
+        heartbeat: {
+          "0%, 100%": { transform: "scale(1)" },
+          "14%": { transform: "scale(1.15)" },
+          "28%": { transform: "scale(1)" },
+          "42%": { transform: "scale(1.1)" },
+          "56%": { transform: "scale(1)" },
+        },
+        "soft-pulse": {
+          "0%, 100%": { opacity: "0.4" },
+          "50%": { opacity: "0.8" },
         },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "float-heart": "float-heart 12s ease-in-out infinite",
+        heartbeat: "heartbeat 2s ease-in-out infinite",
+        "soft-pulse": "soft-pulse 3s ease-in-out infinite",
       },
     },
   },
