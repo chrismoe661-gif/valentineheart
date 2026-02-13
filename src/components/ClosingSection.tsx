@@ -9,10 +9,10 @@ const ClosingSection = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.8 }}
-          className="space-y-8"
-        >
-          <p className="text-lg md:text-xl text-muted-foreground font-body italic leading-relaxed">
-            Tonight, if no one says it to you —
+          className="space-y-8">
+
+          <p className="text-lg md:text-xl text-muted-foreground font-body italic leading-relaxed">Tonight, if no one says it to you —
+Let me say it.
             <br />
             let this website say it.
           </p>
@@ -33,8 +33,8 @@ const ClosingSection = () => {
           <div className="pt-8">
             <span
               className="inline-block text-5xl text-primary"
-              style={{ animation: "heartbeat 2s ease-in-out infinite" }}
-            >
+              style={{ animation: "heartbeat 2s ease-in-out infinite" }}>
+
               ♥
             </span>
           </div>
@@ -44,8 +44,8 @@ const ClosingSection = () => {
           </p>
         </motion.div>
       </div>
-    </section>
-  );
+    </section>);
+
 };
 
 export default ClosingSection;
