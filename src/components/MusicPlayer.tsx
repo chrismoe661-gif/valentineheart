@@ -4,7 +4,7 @@ import { Volume2, VolumeX, Play, Pause } from "lucide-react";
 const YOUTUBE_VIDEO_ID = "8XzQML4y7cs";
 
 const MusicPlayer = () => {
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(true);
   const [volume, setVolume] = useState(30);
   const [isMuted, setIsMuted] = useState(false);
   const [showControls, setShowControls] = useState(false);
@@ -24,7 +24,7 @@ const MusicPlayer = () => {
       playerRef.current = new (window as any).YT.Player("yt-player", {
         videoId: YOUTUBE_VIDEO_ID,
         playerVars: {
-          autoplay: 0,
+          autoplay: 1,
           loop: 1,
           playlist: YOUTUBE_VIDEO_ID,
           controls: 0,
@@ -36,6 +36,7 @@ const MusicPlayer = () => {
         events: {
           onReady: () => {
             playerRef.current.setVolume(volume);
+            playerRef.current.playVideo();
             setPlayerReady(true);
           },
         },
