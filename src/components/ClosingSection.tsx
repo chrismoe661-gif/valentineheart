@@ -13,8 +13,6 @@ const ClosingSection = () => {
 
           <p className="text-lg md:text-xl text-muted-foreground font-body italic leading-relaxed">Tonight, if no one says it to you —
 Let me say it.
-            <br />
-            let this website say it.
           </p>
 
           <div className="space-y-3">
